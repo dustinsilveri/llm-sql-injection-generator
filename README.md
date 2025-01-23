@@ -1,19 +1,8 @@
-# Hackaton project 24
-
-### Build an LLM powered simple SQLMap.
+#  LLM powered simple SQLMap tool
 Need depedencies
 ```bash
 pip install requests ollama
 ```
-
-## Goals
-- [x] Determine what models work best for sql injection payload generation.
-- [x] Experiment with different prompts to get the correct payload quicker with DVWA.
-- [x] Create a POC for automating the test, using sleep payloads.
-- [ ] Try to get the POC to detect the SQL injection in all three modes.
-  - [x] Low
-  - [x] Medium
-  - [ ] High
 
 ## Notes 
 I experimented with different local language models using Ollama. Using Python ollama I pointed the injection point to the exact vulnerable parameter in DVWA. Then using different prompts to have the model ONLY generate a payload, and no other speech, it iteratted through the first generated payload, and if it detected a 5 second sleep, it would stop. Otherwise it would continue until it found a working payload that confirmed the detection.
@@ -92,13 +81,3 @@ payload: None
 payload: None
 0.01 http://localhost/vulnerabilities/sqli/?id=1None&Submit=Submit#
 ```
-
-## Outcomes
-
-This could be used to generate initial payloads for the Dynamic scanner to use on each scan. So they could potentially change every scan, giving the customer regular testing.  An application may have blacklisting in place to prevent specific characters that our current payloads do not fire on.  But having it regularly change could be a benefit in some cases.
-
-This same process could be used to generate XSS payloads. For the same reason, in some cases specific characters are blocked or blacklisted which could stop our current payloads.  But changing regularly could provide ongoing unique testing to our scans.
-
-The timing to detection was very random. Sometimes it would get the 'low' and 'med' level one the first couple attempts, other times it would go on for many where I had to kill it.  The amount of time it took to generate the payload was very time consuming as I only have a laptop gpu it is working off. :(
-
-Future research could also be around having the LLM, detect fuzz points and then point the payloads to each detected fuzz point.  Though this could be VERY time consuming, it could be worth testing on.
